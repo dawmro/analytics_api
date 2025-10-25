@@ -24,8 +24,10 @@ def read_events() -> EventListSchema:
 @router.post("/")
 def create_event(payload:EventCreateSchema) -> EventSchema:
     print(payload.page, type(payload.page))
+    data = payload.model_dump() # payload -> dict -> pydantic
     return {
-        "id": 123
+        "id": 123,
+        **data
     }
 
 
@@ -39,6 +41,8 @@ def get_event(event_id:int) -> EventSchema:
 @router.put("/{event_id}")
 def update_event(event_id:int, payload:EventUpdateSchema) -> EventSchema:
     print(payload.description, type(payload.description))
+    data = payload.model_dump() # payload -> dict -> pydantic
     return {
-        "id": event_id
+        "id": event_id,
+        **data
     }
