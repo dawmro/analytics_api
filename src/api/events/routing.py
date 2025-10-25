@@ -1,3 +1,4 @@
+import os
 from fastapi import APIRouter
 from .schemas import (
     EventCreateSchema,
@@ -5,12 +6,14 @@ from .schemas import (
     EventSchema,
     EventListSchema
 )
+from api.db.config import DATABASE_URL
 
 router = APIRouter()
 
 
 @router.get("/")
 def read_events() -> EventListSchema:
+    print(os.environ.get("DATABASE_URL"), DATABASE_URL)
     return {
         "results": [
             {"id": 1}, 
