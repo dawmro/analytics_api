@@ -16,8 +16,23 @@ def read_events() -> EventListSchema:
     }
 
 
+@router.post("/")
+def create_event(data:dict={}) -> EventSchema:
+    print(data, type(data))
+    return {
+        "id": 123
+    }
+
+
 @router.get("/{event_id}")
 def get_event(event_id:int) -> EventSchema:
+    return {
+        "id": event_id
+    }
+
+
+@router.put("/{event_id}")
+def update_event(event_id:int, payload:dict={}) -> EventSchema:
     return {
         "id": event_id
     }
