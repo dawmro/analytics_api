@@ -8,3 +8,5 @@ docker run analytics-api:latest
 docker compose up
 docker compose up --watch
 docker compose up --build
+docker compose up --build --watch
+docker compose down -v
