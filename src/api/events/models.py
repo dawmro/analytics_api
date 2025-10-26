@@ -3,21 +3,21 @@ from sqlmodel import SQLModel, Field
 
 
 
-class EventSchema(SQLModel):
-    id: int
+class EventModel(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
     page: Optional[str] = ""
     description: Optional[str] = ""
 
 
-class EventCreateSchema(SQLModel):
+class EventCreateModel(SQLModel):
     page: str
     description: Optional[str] = Field(default="default description")
 
 
-class EventUpdateSchema(SQLModel):
+class EventUpdateModel(SQLModel):
     description: str
 
 
-class EventListSchema(SQLModel):
-    results: List[EventSchema]
+class EventListModel(SQLModel):
+    results: List[EventModel]
     count: int

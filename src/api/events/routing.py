@@ -1,10 +1,10 @@
 import os
 from fastapi import APIRouter
 from .models import (
-    EventCreateSchema,
-    EventUpdateSchema,
-    EventSchema,
-    EventListSchema
+    EventCreateModel,
+    EventUpdateModel,
+    EventModel,
+    EventListModel
 )
 from api.db.config import DATABASE_URL
 
@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/")
-def read_events() -> EventListSchema:
+def read_events() -> EventListModel:
     print(os.environ.get("DATABASE_URL"), DATABASE_URL)
     return {
         "results": [
@@ -25,7 +25,7 @@ def read_events() -> EventListSchema:
 
 
 @router.post("/")
-def create_event(payload:EventCreateSchema) -> EventSchema:
+def create_event(payload:EventCreateModel) -> EventModel:
     print(payload.page, type(payload.page))
     data = payload.model_dump() # payload -> dict -> pydantic
     return {
@@ -35,14 +35,14 @@ def create_event(payload:EventCreateSchema) -> EventSchema:
 
 
 @router.get("/{event_id}")
-def get_event(event_id:int) -> EventSchema:
+def get_event(event_id:int) -> EventModel:
     return {
         "id": event_id
     }
 
 
 @router.put("/{event_id}")
-def update_event(event_id:int, payload:EventUpdateSchema) -> EventSchema:
+def update_event(event_id:int, payload:EventUpdateModel) -> EventModel:
     print(payload.description, type(payload.description))
     data = payload.model_dump() # payload -> dict -> pydantic
     return {
