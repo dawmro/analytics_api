@@ -1,6 +1,6 @@
 import os
 from fastapi import APIRouter, Depends
-from sqlmodel import Session
+from sqlmodel import Session, select
 from api.db.session import get_session
 from .models import (
     EventCreateModel,
@@ -13,12 +13,20 @@ from api.db.config import DATABASE_URL
 router = APIRouter()
 
 
+@router.get("/", response_model=EventListModel)
+def read_events(session: Session = Depends(get_session)):
+    query = select(EventModel).order_by(EventModel.id.desc()).limit(10)
+    results = session.exec(query).all()
+    return {
+        "results": results,
+        "count": len(results)
+    }
+
 
 @router.post("/", response_model=EventModel)
 def create_event(
         payload:EventCreateModel, 
         session: Session = Depends(get_session)):
-    #print(payload.page, type(payload.page))
     data = payload.model_dump() # payload -> dict -> pydantic
     obj = EventModel.model_validate(data)
     session.add(obj) # prepare to add
@@ -26,19 +34,6 @@ def create_event(
     session.refresh(obj) # get info about object
 
     return obj
-
-
-@router.get("/")
-def read_events() -> EventListModel:
-    print(os.environ.get("DATABASE_URL"), DATABASE_URL)
-    return {
-        "results": [
-            {"id": 1}, 
-            {"id": 2}, 
-            {"id": 3}
-        ],
-        "count": 3
-    }
 
 
 @router.get("/{event_id}")
