@@ -22,18 +22,26 @@ services:
           path: requirements.txt
         - action: rebuild
           path: compose.yaml
+    depends_on:
+        db_service:
+            condition: service_healthy
   db_service:
     image: timescale/timescaledb:latest-pg17
     environment:
       - POSTGRES_USER=time-user
       - POSTGRES_PASSWORD=time-pw
-      - POSTGRESS_DB=timescaledb
+      - POSTGRES_DB=timescaledb
     ports:
       - "5432:5432"
     expose:
       - 5432
     volumes:
       - timescaledb_data:/var/lib/postgresql/data
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U time-user -d timescaledb"]
+        interval: 10s
+        timeout: 10s
+        retries: 10
 
 volumes:
   timescaledb_data:
