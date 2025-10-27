@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from api.db.session import get_session
 from .models import (
@@ -36,12 +36,15 @@ def create_event(
     return obj
 
 
-@router.get("/{event_id}")
-def get_event(event_id:int) -> EventModel:
-    return {
-        "id": event_id
-    }
-
+@router.get("/{event_id}", response_model=EventModel)
+def get_event(
+        event_id:int, 
+        session: Session = Depends(get_session)):
+    query = select(EventModel).where(EventModel.id == event_id)
+    result = session.exec(query).first()
+    if not result:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return result
 
 @router.put("/{event_id}")
 def update_event(event_id:int, payload:EventUpdateModel) -> EventModel:
