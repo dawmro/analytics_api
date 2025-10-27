@@ -6,7 +6,8 @@ from .models import (
     EventCreateModel,
     EventUpdateModel,
     EventModel,
-    EventListModel
+    EventListModel,
+    get_utc_now
 )
 from api.db.config import DATABASE_URL
 
@@ -15,7 +16,7 @@ router = APIRouter()
 
 @router.get("/", response_model=EventListModel)
 def read_events(session: Session = Depends(get_session)):
-    query = select(EventModel).order_by(EventModel.id.desc()).limit(10)
+    query = select(EventModel).order_by(EventModel.updated_at.desc()).limit(10)
     results = session.exec(query).all()
     return {
         "results": results,
@@ -59,6 +60,7 @@ def update_event(
     data = payload.model_dump() # payload -> dict -> pydantic
     for k,v in data.items(): # iterate over key and vaule of each item
         setattr(obj, k ,v) # assign value for key in object
+    obj.updated_at = get_utc_now()
     session.add(obj) # prepare to add
     session.commit() # add to db
     session.refresh(obj) # get info about object
