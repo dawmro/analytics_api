@@ -32,7 +32,6 @@ def create_event(
     session.add(obj) # prepare to add
     session.commit() # add to db
     session.refresh(obj) # get info about object
-
     return obj
 
 
@@ -46,11 +45,22 @@ def get_event(
         raise HTTPException(status_code=404, detail="Event not found")
     return result
 
-@router.put("/{event_id}")
-def update_event(event_id:int, payload:EventUpdateModel) -> EventModel:
-    print(payload.description, type(payload.description))
+
+@router.put("/{event_id}", response_model=EventModel)
+def update_event(
+        event_id:int, 
+        payload:EventUpdateModel, 
+        session: Session = Depends(get_session)):
+    query = select(EventModel).where(EventModel.id == event_id)
+    obj = session.exec(query).first()
+    if not obj:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
     data = payload.model_dump() # payload -> dict -> pydantic
-    return {
-        "id": event_id,
-        **data
-    }
+    for k,v in data.items(): # iterate over key and vaule of each item
+        setattr(obj, k ,v) # assign value for key in object
+    session.add(obj) # prepare to add
+    session.commit() # add to db
+    session.refresh(obj) # get info about object
+
+    return obj
