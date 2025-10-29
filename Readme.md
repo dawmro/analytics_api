@@ -10,3 +10,4 @@ docker compose up --watch
 docker compose up --build
 docker compose up --build --watch
 docker compose down -v
+Deplay on railway https://railway.com/
