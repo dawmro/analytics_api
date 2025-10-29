@@ -43,3 +43,9 @@ class EventUpdateModel(SQLModel):
 class EventListModel(SQLModel):
     results: List[EventModel]
     count: int
+
+
+class EventBucketModel(SQLModel):
+    bucket: datetime
+    page: str
+    count: int
