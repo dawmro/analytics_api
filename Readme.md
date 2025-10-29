@@ -10,4 +10,6 @@ docker compose up --watch
 docker compose up --build
 docker compose up --build --watch
 docker compose down -v
-Deplay on railway https://railway.com/
+Deploy on railway https://railway.com/
+Create db on https://console.cloud.timescale.com/
+Set PORT 8080 on Railway
