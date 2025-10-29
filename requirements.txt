@@ -8,4 +8,5 @@ timescaledb
 requests
 python-decouple
 psycopg[binary] # psycopg v3
+faker
 
