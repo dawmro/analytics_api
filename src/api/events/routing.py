@@ -25,7 +25,7 @@ DEFAULT_LOOKUP_PAGES = [
 
 @router.get("/", response_model=List[EventBucketModel])
 def read_events(
-        duration: str = Query(deafult='1 day'),
+        duration: str = Query(default='1 day'),
         pages: List = Query(default=None),
         session: Session = Depends(get_session)
     ):
