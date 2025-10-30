@@ -10,6 +10,8 @@ docker compose up --watch
 docker compose up --build
 docker compose up --build --watch
 docker compose down -v
-Deploy on railway https://railway.com/
-Create db on https://console.cloud.timescale.com/
-Set PORT 8080 on Railway
+Go to railway https://railway.com/
+Create db on https://console.cloud.timescale.com/ 
+Add DATABASE_URL with prefix: postgresql+psycopg:// in Railway Variables
+Set PORT 8080 in Railway Variables
+Deploy on Railway
